@@ -13,21 +13,30 @@ namespace OU3.Controllers
         public IActionResult InsertMovie()
         {
             Movie movie = new Movie();
+            return View(movie);  
+        }
+
+        [HttpPost]
+        public IActionResult InsertMovie(string Title, string Director, int Year, int CopiesAvailable)
+        {
+            Movie movie = new Movie
+            {
+                Title = Title,
+                Director = Director,
+                Year = Year,
+                CopiesAvailable = CopiesAvailable
+            };
+
             MovieMethods movieMethods = new MovieMethods();
-            int i = 0;
             string error = "";
+            int i = movieMethods.InsertMovie(movie, out error);
 
-            movie.Title = "New Movie";
-            movie.Year = 2024;
-            movie.Director = "ValterTF";
-            movie.CopiesAvailable = 1;
-
-            i = movieMethods.InsertMovie(movie, out error);
             ViewBag.Error = error;
-            ViewBag.antal = i;
+            ViewBag.Antal = i;
 
             return View();
         }
+
 
         public IActionResult SelectMovies()
         {
