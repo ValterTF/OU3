@@ -28,5 +28,15 @@ namespace OU3.Controllers
 
             return View();
         }
+
+        public IActionResult SelectMovies()
+        {
+            List<Movie> movieList = new List<Movie>();
+            MovieMethods movieMethods = new MovieMethods();
+            string error = "";
+            movieList = movieMethods.GetMovieList(out error);
+            ViewBag.Error = error;
+            return View(movieList);
+        }
     }
 }
