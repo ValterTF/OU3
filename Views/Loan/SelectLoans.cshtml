@@ -1,0 +1,61 @@
+﻿@model IEnumerable<OU3.Models.Loan>
+
+@{
+    ViewData["Title"] = "Select Loans";
+}
+
+<h1>Select Loans</h1>
+
+<p>
+    <a asp-action="InsertLoan">Create New Loan</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LoanID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FilmID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BorrowerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoanDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoanID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FilmID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BorrowerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoanDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.LoanID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.LoanID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.LoanID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

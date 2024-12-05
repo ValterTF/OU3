@@ -1,25 +1,31 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
 
-
 namespace OU3.Models
 {
-    public class MovieMethods
+    public class LoanMethods
     {
-        public MovieMethods() { }
+        public LoanMethods() { }
 
-        public int InsertMovie(Movie Movie, out string errormsg)
+        public int InsertLoan(Loan loan, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
-            string sqlstring = "INSERT INTO Filmer (Title, Director, Year, CopiesAvailable) VALUES (@Title, @Director, @Year, @CopiesAvailable)";
+            string sqlstring = "INSERT INTO Utlån (FilmID, BorrowerName, LoanDate, ReturnDate) VALUES (@FilmID, @BorrowerName, @LoanDate, @ReturnDate)";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
 
-            sqlCommand.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 100).Value = Movie.Title;
-            sqlCommand.Parameters.Add("@Director", System.Data.SqlDbType.NVarChar, 100).Value = Movie.Director;
-            sqlCommand.Parameters.Add("@Year", System.Data.SqlDbType.Int).Value = Movie.Year;
-            sqlCommand.Parameters.Add("@CopiesAvailable", System.Data.SqlDbType.Int).Value = Movie.CopiesAvailable;
+            sqlCommand.Parameters.Add("@FilmID", System.Data.SqlDbType.Int).Value = loan.FilmID;
+            sqlCommand.Parameters.Add("@BorrowerName", System.Data.SqlDbType.NVarChar, 100).Value = loan.BorrowerName;
+            sqlCommand.Parameters.Add("@LoanDate", System.Data.SqlDbType.Date).Value = loan.LoanDate;
 
+            if (loan.ReturnDate.HasValue)
+            {
+                sqlCommand.Parameters.Add("@ReturnDate", System.Data.SqlDbType.Date).Value = loan.ReturnDate.Value;
+            }
+            else
+            {
+                sqlCommand.Parameters.Add("@ReturnDate", System.Data.SqlDbType.Date).Value = DBNull.Value;
+            }
             try
             {
                 sqlConnection.Open();
@@ -45,51 +51,48 @@ namespace OU3.Models
                 sqlConnection.Close();
             }
         }
-
-        public List<Movie> GetMovieList(out string errormsg)
+        public List<Loan> GetLoanList(out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
 
-            String sqlstring = "Select * From Filmer";
+            string sqlstring = "SELECT * FROM Utlån";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
 
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
 
             DataSet dataSet = new DataSet();
 
-            List<Movie> movieList = new List<Movie>();
+            List<Loan> loanList = new List<Loan>();
 
             try
             {
                 sqlConnection.Open();
-                sqlDataAdapter.Fill(dataSet, "Filmer");
+                sqlDataAdapter.Fill(dataSet, "Utlån");
 
                 int i = 0;
-                int count = 0;
-
-                count = dataSet.Tables["Filmer"].Rows.Count;
+                int count = dataSet.Tables["Utlån"].Rows.Count;
 
                 if (count > 0)
                 {
                     while (i < count)
                     {
-                        Movie movie = new Movie();
-                        movie.FilmID = Convert.ToInt16(dataSet.Tables["Filmer"].Rows[i]["FilmID"]);
-                        movie.Title = dataSet.Tables["Filmer"].Rows[i]["Title"].ToString();
-                        movie.Director = dataSet.Tables["Filmer"].Rows[i]["Director"].ToString();
-                        movie.Year = Convert.ToInt16(dataSet.Tables["Filmer"].Rows[i]["Year"]);
-                        movie.CopiesAvailable = Convert.ToInt16(dataSet.Tables["Filmer"].Rows[i]["CopiesAvailable"]);
+                        Loan loan = new Loan();
+                        loan.LoanID = Convert.ToInt32(dataSet.Tables["Utlån"].Rows[i]["LoanID"]);
+                        loan.FilmID = Convert.ToInt32(dataSet.Tables["Utlån"].Rows[i]["FilmID"]);
+                        loan.BorrowerName = dataSet.Tables["Utlån"].Rows[i]["BorrowerName"].ToString();
+                        loan.LoanDate = Convert.ToDateTime(dataSet.Tables["Utlån"].Rows[i]["LoanDate"]);
+                        loan.ReturnDate = dataSet.Tables["Utlån"].Rows[i]["ReturnDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataSet.Tables["Utlån"].Rows[i]["ReturnDate"]);
 
                         i++;
-                        movieList.Add(movie);
+                        loanList.Add(loan);
                     }
                     errormsg = "";
-                    return movieList;
+                    return loanList;
                 }
                 else
                 {
-                    errormsg = "No Movies, command failed";
+                    errormsg = "No Loans, command failed";
                     return null;
                 }
             }
@@ -103,7 +106,5 @@ namespace OU3.Models
                 sqlConnection.Close();
             }
         }
-    }
+    }   
 }
-
-

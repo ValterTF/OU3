@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Insert Loan";
+}
+
+<h2>Insert Loan</h2>
+
+<form method="post" asp-action="InsertLoan">
+    <div class="form-group">
+        <label for="FilmID">Film ID</label>
+        <input type="number" class="form-control" id="FilmID" name="FilmID" required />
+    </div>
+    <div class="form-group">
+        <label for="BorrowerName">Borrower Name</label>
+        <input type="text" class="form-control" id="BorrowerName" name="BorrowerName" required />
+    </div>
+    <div class="form-group">
+        <label for="LoanDate">Loan Date</label>
+        <input type="date" class="form-control" id="LoanDate" name="LoanDate" required />
+    </div>
+    <div class="form-group">
+        <label for="ReturnDate">Return Date (optional)</label>
+        <input type="date" class="form-control" id="ReturnDate" name="ReturnDate" />
+    </div>
+    <button type="submit" class="btn btn-primary">Insert Loan</button>
+</form>
+
+@if (ViewBag.Error != null && ViewBag.Error != "")
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+@if (ViewBag.Antal != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.Antal loan was inserted.
+    </div>
+}
