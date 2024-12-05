@@ -5,5 +5,10 @@
 <div class="text-center">
     <h1 class="display-4">Movie Ratings</h1>
     <a class="btn btn-primary" asp-area="" asp-controller="Movie" asp-action="InsertMovie">Insert Movie</a>
-    <a class="btn btn-secondary" asp-area="" asp-controller="MovieLoan" asp-action="SelectMoviesLoan">Get Movies and Loan</a>
+    <a class="btn btn-primary" asp-area="" asp-controller="Loan" asp-action="InsertLoan">Insert Loan</a>
+    <a class="btn btn-secondary" asp-area="" asp-controller="Movie" asp-action="SelectMovies">Get Movies</a>
+    <a class="btn btn-secondary" asp-area="" asp-controller="Loan" asp-action="SelectLoans">Get Loan</a>
+
+    <a class="btn btn-secondary" asp-controller="MovieLoan" asp-action="SelectMoviesAndLoans">Get Movies and Loans</a>
+
 </div>

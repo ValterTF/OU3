@@ -10,14 +10,27 @@ namespace OU3.Controllers
             return View();
         }
 
-        public IActionResult SelectMoviesLoan()
+        public IActionResult SelectMoviesAndLoans()
         {
-            MovieLoanMethods movieLoanMethods = new MovieLoanMethods();
-            string error = "";
-            var movieLoanList = movieLoanMethods.GetMoviesAndLoans(out error);
+            MovieMethods movieMethods = new MovieMethods();
+            LoanMethods loanMethods = new LoanMethods();
 
-            ViewBag.Error = error;
-            return View(movieLoanList);
+            string movieError = "";
+            string loanError = "";
+
+            var movies = movieMethods.GetMovieList(out movieError);
+            var loans = loanMethods.GetLoanList(out loanError);
+
+            var viewModel = new MovieLoanViewModel
+            {
+                Movies = movies, 
+                Loans = loans   
+            };
+
+            ViewBag.MovieError = movieError;
+            ViewBag.LoanError = loanError;
+
+            return View(viewModel);
         }
     }
 }

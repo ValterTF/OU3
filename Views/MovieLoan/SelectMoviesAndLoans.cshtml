@@ -1,0 +1,67 @@
+﻿@model OU3.Models.MovieLoanViewModel
+
+@{
+    ViewData["Title"] = "SelectMoviesAndLoans";
+}
+
+<h1>Movies and Loans</h1>
+
+<h2>Movies</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Film ID</th>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Year</th>
+            <th>Copies Available</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model.Movies)
+        {
+            <tr>
+                <td>@movie.FilmID</td>
+                <td>@movie.Title</td>
+                <td>@movie.Director</td>
+                <td>@movie.Year</td>
+                <td>@movie.CopiesAvailable</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Loans</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Loan ID</th>
+            <th>Film ID</th>
+            <th>Borrower</th>
+            <th>Loan Date</th>
+            <th>Return Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var loan in Model.Loans)
+        {
+            <tr>
+                <td>@loan.LoanID</td>
+                <td>@loan.FilmID</td>
+                <td>@loan.BorrowerName</td>
+                <td>@loan.LoanDate.ToString("yyyy-MM-dd")</td>
+                <td>@loan.ReturnDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
