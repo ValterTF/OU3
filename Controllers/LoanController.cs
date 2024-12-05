@@ -5,20 +5,17 @@ namespace OU3.Controllers
 {
     public class LoanController : Controller
     {
-        // Visa startsidan för Loan
         public IActionResult Index()
         {
             return View();
         }
 
-        // GET: Visa formulär för att lägga till ett nytt lån
         public IActionResult InsertLoan()
         {
             Loan loan = new Loan();
             return View(loan);
         }
 
-        // POST: Hantera formulärdata och lägg till ett nytt lån
         [HttpPost]
         public IActionResult InsertLoan(int FilmID, string BorrowerName, DateTime LoanDate, DateTime? ReturnDate)
         {
@@ -40,7 +37,6 @@ namespace OU3.Controllers
             return View();
         }
 
-        // GET: Visa en lista med alla lån
         public IActionResult SelectLoans()
         {
             List<Loan> loanList = new List<Loan>();
