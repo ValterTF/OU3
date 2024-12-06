@@ -32,5 +32,27 @@ namespace OU3.Controllers
 
             return View(viewModel);
         }
+
+        public IActionResult FilterByDirector(string director)
+        {
+            MovieMethods movieMethods = new MovieMethods();
+            string error;
+
+            var movies = movieMethods.GetMovieList(out error);
+
+            if (movies == null || !string.IsNullOrEmpty(error))
+            {
+                ViewBag.Error = error;
+                return View("Error");
+            }
+            var filteredMovies = movies.Where(m => m.Director == director).ToList();
+
+            var viewModel = new MovieLoanViewModel
+            {
+                Movies = filteredMovies,
+            };
+
+            return View("SelectMoviesAndLoans", viewModel);
+        }
     }
 }

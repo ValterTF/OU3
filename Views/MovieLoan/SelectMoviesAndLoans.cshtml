@@ -14,12 +14,15 @@
 <p></p>
 <p></p>
 
-<select id="Director" name="Director">
-    @foreach (var director in Model.Movies.Select(m => m.Director).Distinct())
-    {
-        <option value="@director">@director</option>
-    }
-</select>
+<form asp-action="FilterByDirector" method="get">
+    <select id="Director" name="director">
+        @foreach (var director in Model.Movies.Select(m => m.Director).Distinct())
+        {
+            <option value="@director">@director</option>
+        }
+    </select>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
 
 
 <table class="table">
