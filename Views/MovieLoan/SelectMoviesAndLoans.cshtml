@@ -28,7 +28,7 @@
                 <td>@movie.CopiesAvailable</td>
                 <td>
                     @Html.ActionLink("Edit", "EditMovie", "Movie", new { id = movie.FilmID }, new { @class = "btn btn-warning" }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Delete", "DeleteMovie", "Movie", new { id = movie.FilmID }, new { @class = "btn btn-warning" })
                 </td>
             </tr>
         }
@@ -56,7 +56,7 @@
                 <td>@loan.LoanDate.ToString("yyyy-MM-dd")</td>
                 <td>@loan.ReturnDate?.ToString("yyyy-MM-dd")</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Edit", "EditLoan", "Loan", new { id = loan.LoanID }, new { @class = "btn btn-warning" }) |
                     @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                 </td>
             </tr>

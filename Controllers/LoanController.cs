@@ -46,6 +46,38 @@ namespace OU3.Controllers
             ViewBag.Error = error;
             return View(loanList);
         }
+
+        public IActionResult EditLoan(int id)
+        {
+            LoanMethods loanMethods = new LoanMethods();
+            string error;
+            Loan loan = loanMethods.GetLoanDetails(id, out error);
+
+            if (loan == null)
+            {
+                ViewBag.Error = error;
+                return View("Error");
+            }
+
+            return View(loan);  
+        }
+
+        [HttpPost]
+        public IActionResult EditLoan(Loan loan)
+        {
+            LoanMethods loanMethods = new LoanMethods();
+            string error;
+            int rowsAffected = loanMethods.UpdateLoan(loan, out error);
+
+            if (rowsAffected == 1)
+            {
+                return RedirectToAction("SelectLoans"); 
+            }
+            else
+            {
+                ViewBag.Error = error;
+                return View(loan); 
+            }
+        }
     }
 }
-

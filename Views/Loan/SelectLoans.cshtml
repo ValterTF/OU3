@@ -51,8 +51,8 @@
                     @item.ReturnDate?.ToString("yyyy-MM-dd")
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.LoanID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.LoanID })
+                    @Html.ActionLink("Edit", "EditLoan", "Loan", new { id = item.LoanID }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.LoanID }, new { @class = "btn btn-warning" })
                 </td>
             </tr>
         }

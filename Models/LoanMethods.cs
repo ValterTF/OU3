@@ -106,5 +106,84 @@ namespace OU3.Models
                 sqlConnection.Close();
             }
         }
+
+        public Loan GetLoanDetails(int loanID, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
+
+            string sqlString = "SELECT * FROM Utlån WHERE LoanID = @LoanID";
+            SqlCommand sqlCommand = new SqlCommand(sqlString, sqlConnection);
+
+            sqlCommand.Parameters.Add("@LoanID", SqlDbType.Int).Value = loanID;
+
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            DataSet dataSet = new DataSet();
+
+            try
+            {
+                sqlConnection.Open();
+                sqlDataAdapter.Fill(dataSet, "Utlån");
+
+                if (dataSet.Tables["Utlån"].Rows.Count > 0)
+                {
+                    DataRow row = dataSet.Tables["Utlån"].Rows[0];
+                    Loan loan = new Loan
+                    {
+                        LoanID = Convert.ToInt16(row["LoanID"]),
+                        FilmID = Convert.ToInt16(row["FilmID"]),
+                        BorrowerName = row["BorrowerName"].ToString(),
+                        LoanDate = Convert.ToDateTime(row["LoanDate"]),
+                        ReturnDate = row["ReturnDate"] != DBNull.Value ? Convert.ToDateTime(row["ReturnDate"]) : (DateTime?)null
+                    };
+                    errormsg = "";
+                    return loan;
+                }
+                else
+                {
+                    errormsg = "Loan not found.";
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
+        public int UpdateLoan(Loan loan, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
+            string sqlString = "UPDATE Utlån SET BorrowerName = @BorrowerName, LoanDate = @LoanDate, ReturnDate = @ReturnDate WHERE LoanID = @LoanID";
+
+            SqlCommand sqlCommand = new SqlCommand(sqlString, sqlConnection);
+            sqlCommand.Parameters.Add("@LoanID", SqlDbType.Int).Value = loan.LoanID;
+            sqlCommand.Parameters.Add("@BorrowerName", SqlDbType.NVarChar, 100).Value = loan.BorrowerName;
+            sqlCommand.Parameters.Add("@LoanDate", SqlDbType.DateTime).Value = loan.LoanDate;
+            sqlCommand.Parameters.Add("@ReturnDate", SqlDbType.DateTime).Value = (object)loan.ReturnDate ?? DBNull.Value;
+
+            try
+            {
+                sqlConnection.Open();
+                int rowsAffected = sqlCommand.ExecuteNonQuery();
+                errormsg = rowsAffected > 0 ? "" : "Update failed.";
+                return rowsAffected;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }   
 }
