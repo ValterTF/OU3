@@ -10,6 +10,18 @@
 <p>
     <a asp-action="InsertMovie" asp-controller="Movie" class="btn btn-primary">Create New</a>
 </p>
+
+<p></p>
+<p></p>
+
+<select id="Director" name="Director">
+    @foreach (var director in Model.Movies.Select(m => m.Director).Distinct())
+    {
+        <option value="@director">@director</option>
+    }
+</select>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -37,6 +49,11 @@
         }
     </tbody>
 </table>
+
+
+<p></p>
+<p></p>
+
 
 <h2>Loans</h2>
 <p>
