@@ -32,6 +32,11 @@
 </form>
 
 
+<p>
+    @Html.ActionLink("Sort by Title (Asc)", "SortMovies", new { title = ViewData["CurrentTitle"], sortOrder = "title_asc" }) |
+    @Html.ActionLink("Sort by Title (Desc)", "SortMovies", new { title = ViewData["CurrentTitle"], sortOrder = "title_desc" })
+</p>
+
 
 <table class="table">
     <thead>
