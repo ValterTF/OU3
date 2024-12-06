@@ -107,7 +107,7 @@ namespace OU3.Controllers
 
             if (result > 0)
             {
-                return RedirectToAction("SelectMoviesAndLoans"); 
+                return RedirectToAction("SelectMovies"); 
             }
 
             ViewBag.Error = errormsg;

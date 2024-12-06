@@ -185,5 +185,32 @@ namespace OU3.Models
                 sqlConnection.Close();
             }
         }
-    }   
+
+        public int DeleteLoan(int loanID, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
+            string sqlString = "DELETE FROM Utlån WHERE LoanID = @LoanID";
+
+            SqlCommand sqlCommand = new SqlCommand(sqlString, sqlConnection);
+            sqlCommand.Parameters.Add("@LoanID", SqlDbType.Int).Value = loanID;
+
+            try
+            {
+                sqlConnection.Open();
+                int rowsAffected = sqlCommand.ExecuteNonQuery();
+                errormsg = rowsAffected > 0 ? "" : "Delete failed.";
+                return rowsAffected;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+    }
 }

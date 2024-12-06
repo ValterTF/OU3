@@ -59,7 +59,7 @@ namespace OU3.Controllers
                 return View("Error");
             }
 
-            return View(loan);  
+            return View(loan);
         }
 
         [HttpPost]
@@ -71,12 +71,45 @@ namespace OU3.Controllers
 
             if (rowsAffected == 1)
             {
-                return RedirectToAction("SelectLoans"); 
+                return RedirectToAction("SelectLoans");
             }
             else
             {
                 ViewBag.Error = error;
-                return View(loan); 
+                return View(loan);
+            }
+        }
+
+        public IActionResult DeleteLoan(int id)
+        {
+            LoanMethods loanMethods = new LoanMethods();
+            string error;
+            Loan loan = loanMethods.GetLoanDetails(id, out error);
+
+            if (loan == null)
+            {
+                ViewBag.Error = error;
+                return View("Error");
+            }
+
+            return View(loan);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteLoanConfirmed(int id)
+        {
+            LoanMethods loanMethods = new LoanMethods();
+            string error;
+            int rowsAffected = loanMethods.DeleteLoan(id, out error);
+
+            if (rowsAffected == 1)
+            {
+                return RedirectToAction("SelectLoans");  
+            }
+            else
+            {
+                ViewBag.Error = error;
+                return View("Error");  
             }
         }
     }

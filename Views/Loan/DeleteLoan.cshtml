@@ -1,0 +1,26 @@
+﻿@model OU3.Models.Loan
+
+@{
+    ViewData["Title"] = "Delete Loan";
+}
+
+<h2>Delete Loan</h2>
+
+<div>
+    <h4>Are you sure you want to delete this loan?</h4>
+    <p><strong>Borrower Name:</strong> @Model.BorrowerName</p>
+    <p><strong>Loan Date:</strong> @Model.LoanDate.ToString("yyyy-MM-dd")</p>
+    <p><strong>Return Date:</strong> @(Model.ReturnDate.HasValue ? Model.ReturnDate.Value.ToString("yyyy-MM-dd") : "Not Returned")</p>
+</div>
+
+<form method="post" asp-action="DeleteLoanConfirmed" asp-route-id="@Model.LoanID">
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="SelectLoans" class="btn btn-secondary">Cancel</a>
+</form>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
