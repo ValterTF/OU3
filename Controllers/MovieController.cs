@@ -83,5 +83,36 @@ namespace OU3.Controllers
         }
 
 
+        public IActionResult DeleteMovie(int id)
+        {
+            MovieMethods movieMethods = new MovieMethods();
+            string errormsg;
+            Movie movie = movieMethods.GetMovieDetails(id, out errormsg);
+
+            if (movie == null)
+            {
+                ViewBag.Error = errormsg;
+                return View("Error"); 
+            }
+
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            MovieMethods movieMethods = new MovieMethods();
+            string errormsg;
+            int result = movieMethods.DeleteMovie(id, out errormsg);
+
+            if (result > 0)
+            {
+                return RedirectToAction("SelectMovies"); 
+            }
+
+            ViewBag.Error = errormsg;
+            return View("Error"); 
+        }
+
     }
 }

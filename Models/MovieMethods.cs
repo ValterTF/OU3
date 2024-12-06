@@ -194,6 +194,34 @@ namespace OU3.Models
             }
         }
 
+        public int DeleteMovie(int FilmID, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
+
+            string sqlstring = "DELETE FROM Filmer WHERE FilmID = @FilmID";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+
+            sqlCommand.Parameters.Add("@FilmID", SqlDbType.Int).Value = FilmID;
+
+            try
+            {
+                sqlConnection.Open();
+                int rowsAffected = sqlCommand.ExecuteNonQuery();
+                errormsg = rowsAffected > 0 ? "" : "Delete failed";
+                return rowsAffected;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
     }
 }
 
