@@ -47,5 +47,41 @@ namespace OU3.Controllers
             ViewBag.Error = error;
             return View(movieList);
         }
+
+        public IActionResult EditMovie(int id)
+        {
+            MovieMethods movieMethods = new MovieMethods();
+            string error;
+            Movie movie = movieMethods.GetMovieDetails(id, out error);
+
+            if (movie == null)
+            {
+                ViewBag.Error = error;
+                return View("Error");
+            }
+
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult EditMovie(Movie movie)
+        {
+            MovieMethods movieMethods = new MovieMethods();
+            string error;
+
+            int rowsAffected = movieMethods.UpdateMovie(movie, out error);
+
+            if (rowsAffected == 1)
+            {
+                return RedirectToAction("SelectMovies"); 
+            }
+            else
+            {
+                ViewBag.Error = error; 
+                return View(movie); 
+            }
+        }
+
+
     }
 }

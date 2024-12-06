@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.CopiesAvailable)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Edit", "EditMovie", "Movie", new { id = item.FilmID }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */}, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
             </td>
         </tr>
 }

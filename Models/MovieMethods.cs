@@ -103,6 +103,97 @@ namespace OU3.Models
                 sqlConnection.Close();
             }
         }
+
+        public Movie GetMovieDetails(int FilmID, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
+
+            String sqlstring = "Select * From Filmer Where FilmID = @FilmID";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+
+            sqlCommand.Parameters.Add("FilmID", SqlDbType.Int).Value = FilmID;
+
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            DataSet dataSet = new DataSet();
+
+            try
+            {
+                sqlConnection.Open();
+                sqlDataAdapter.Fill(dataSet, "Filmer");
+
+                if (dataSet.Tables["Filmer"].Rows.Count > 0)
+                {
+                    DataRow row = dataSet.Tables["Filmer"].Rows[0];
+
+                    Movie movie = new Movie
+                    {
+                        FilmID = Convert.ToInt16(row["FilmID"]),
+                        Title = row["Title"].ToString(),
+                        Director = row["Director"].ToString(),
+                        Year = Convert.ToInt16(row["Year"]),
+                        CopiesAvailable = Convert.ToInt16(row["CopiesAvailable"])
+                    };
+
+                    errormsg = "";
+                    return movie;
+                }
+                else
+                {
+                    errormsg = "Movie not found";
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
+        public int UpdateMovie(Movie movie, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=OU2;Integrated Security=True;Encrypt=True";
+
+            string sqlstring = "UPDATE Filmer SET Title = @Title, Director = @Director, Year = @Year, CopiesAvailable = @CopiesAvailable WHERE FilmID = @FilmID";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+
+            sqlCommand.Parameters.Add("@Title", SqlDbType.NVarChar, 100).Value = movie.Title;
+            sqlCommand.Parameters.Add("@Director", SqlDbType.NVarChar, 100).Value = movie.Director;
+            sqlCommand.Parameters.Add("@Year", SqlDbType.Int).Value = movie.Year;
+            sqlCommand.Parameters.Add("@CopiesAvailable", SqlDbType.Int).Value = movie.CopiesAvailable;
+            sqlCommand.Parameters.Add("@FilmID", SqlDbType.Int).Value = movie.FilmID;
+
+            try
+            {
+                sqlConnection.Open();
+                int rowsAffected = sqlCommand.ExecuteNonQuery();
+                if (rowsAffected == 1)
+                {
+                    errormsg = "";
+                }
+                else
+                {
+                    errormsg = "Update failed, no rows affected.";
+                }
+                return rowsAffected;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
     }
 }
 
