@@ -45,14 +45,13 @@
                     @Html.DisplayFor(modelItem => item.BorrowerName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LoanDate)
+                    @item.LoanDate.ToString("yyyy-MM-dd")
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                    @item.ReturnDate?.ToString("yyyy-MM-dd")
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.LoanID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.LoanID }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.LoanID })
                 </td>
             </tr>
