@@ -208,7 +208,26 @@ namespace OU3.Models
             {
                 sqlConnection.Open();
                 int rowsAffected = sqlCommand.ExecuteNonQuery();
-                errormsg = rowsAffected > 0 ? "" : "Delete failed";
+
+                if (rowsAffected > 0)
+                {
+
+                    string getLastIDSQL = "SELECT ISNULL(MAX(FilmID), 0) AS LastID FROM Filmer";
+                    SqlCommand getLastIDCommand = new SqlCommand(getLastIDSQL, sqlConnection);
+                    int lastExistingID = (int)getLastIDCommand.ExecuteScalar();
+
+                    string resetIdentitySQL = "DBCC CHECKIDENT ('Filmer', RESEED, @LastID)";
+                    SqlCommand resetCommand = new SqlCommand(resetIdentitySQL, sqlConnection);
+                    resetCommand.Parameters.Add("@LastID", SqlDbType.Int).Value = lastExistingID;
+                    resetCommand.ExecuteNonQuery();
+
+                    errormsg = ""; 
+                }
+                else
+                {
+                    errormsg = "Delete failed";
+                }
+
                 return rowsAffected;
             }
             catch (Exception e)
@@ -221,6 +240,7 @@ namespace OU3.Models
                 sqlConnection.Close();
             }
         }
+
 
     }
 }
