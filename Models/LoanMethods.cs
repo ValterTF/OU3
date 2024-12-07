@@ -199,7 +199,24 @@ namespace OU3.Models
             {
                 sqlConnection.Open();
                 int rowsAffected = sqlCommand.ExecuteNonQuery();
-                errormsg = rowsAffected > 0 ? "" : "Delete failed.";
+
+                if (rowsAffected > 0)
+                {
+                    string getLastLoanIDSQL = "SELECT ISNULL(MAX(LoanID), 0) AS LastID FROM Utlån";
+                    SqlCommand getLastLoanIDCommand = new SqlCommand(getLastLoanIDSQL, sqlConnection);
+                    int lastExistingLoanID = (int)getLastLoanIDCommand.ExecuteScalar();
+
+                    string resetLoanIdentitySQL = "DBCC CHECKIDENT ('Utlån', RESEED, @LastID)";
+                    SqlCommand resetLoanIdentityCommand = new SqlCommand(resetLoanIdentitySQL, sqlConnection);
+                    resetLoanIdentityCommand.Parameters.Add("@LastID", SqlDbType.Int).Value = lastExistingLoanID;
+                    resetLoanIdentityCommand.ExecuteNonQuery();
+
+                    errormsg = ""; 
+                }
+                else
+                {
+                    errormsg = "Delete failed.";
+                }
                 return rowsAffected;
             }
             catch (Exception e)
